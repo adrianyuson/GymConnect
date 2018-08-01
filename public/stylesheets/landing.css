@@ -1,0 +1,12 @@
+#landing-header {
+    text-align: center;
+    padding-top: 30vh;
+}
+
+#landing-header h1 {
+  color: #fff;
+}
+
+.blackbg {
+    background-color: black;
+}
