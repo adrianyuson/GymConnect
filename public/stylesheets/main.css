@@ -10,16 +10,15 @@
 
 .img-thumbnail {
     padding: 0;
-    margin-bottom: 3vh;
 }
 
-img {
+.img-fluid {
     width: 100%;
-    max-width: 800px;
 }
 
 .gym-title {
     font-size: large;
+    font-weight: bold;
     color: black;
 }
 

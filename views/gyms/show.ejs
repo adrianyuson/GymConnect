@@ -1,14 +1,20 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <p><%= gym.name %></p>
-    <img src="<%= gym.image %>" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1024px-No_image_3x4.svg.png';">
-    <p><%= gym.description %></p>
-    <p><%= gym.price %></p>
-    <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
-    <form class="delete-form" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
-        <button class="btn btn-danger">Delete</button>
-    </form>
+    <div class="col-md-9">
+        <div class="img-thumbnail">
+            <img class="img-fluid" src="<%= gym.image %>" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1024px-No_image_3x4.svg.png';">
+        <h4 class="float-right">Price: $<%= gym.price %>/month</h4>
+        <h4><%= gym.name %></h4>
+        <p><%= gym.description %></p>
+        <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
+        <form class="delete-form" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+        </div>
+        
+    </div>
+    
 </div>
 
 <% include ../partials/footer %>
