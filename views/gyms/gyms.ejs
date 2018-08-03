@@ -1,0 +1,45 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <div id="map"></div>
+    <div class="pac-card" id="pac-card">
+      <div>
+        <div id="title">
+          Gym Search
+        </div>
+      </div>
+      <div id="pac-container">
+        <input id="pac-input" type="text"
+            placeholder="Enter a location">
+      </div>
+    </div>
+    <div id="infowindow-content">
+      <img src="" width="16" height="16" id="place-icon">
+      <span id="place-name" class="title"></span><br>
+      <span id="place-address"></span>
+    </div>
+    
+    <div>
+        <a class="btn btn-primary btn-lg" href="/gyms/new">Add New Gym</a>
+    </div>
+    <div class="row text-center">
+        <% gyms.forEach (function(gym) { %>
+        <div class="col-md-6">
+            <div class="img-thumbnail">
+                    <img class="img-fit" src="<%= gym.image %>" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1024px-No_image_3x4.svg.png';">
+                <div class="figure-caption">
+                    <a class="gym-title" href="/gyms/<%= gym._id %>"><%= gym.name %></a>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+    
+</div>
+
+<script src="maps.js"></script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPpqP6eoq_mPyRBOeMOuHbjLICK840nyI&libraries=places&callback=initMap"
+    async defer></script>
+
+<% include ../partials/footer %>

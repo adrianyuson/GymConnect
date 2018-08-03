@@ -1,19 +1,22 @@
-require('dotenv').config();
+require("dotenv").config();
 
 var express = require("express");
 var app = express();
 var gymRoutes = require("./routes/gyms.js");
 var indexRoutes = require("./routes/index.js");
+var bodyParser = require("body-parser");
+var methodOverride = require("method-override");
 
-app.use(express.static(__dirname + '/public'));
+var mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost:27017/gymconnect", { useNewUrlParser: true });
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
 
 app.use(gymRoutes);
 app.use(indexRoutes);
 
-app.get("/about", function(req, res) {
-    res.render("about.ejs");
-});
-
 app.listen(process.env.PORT, process.env.IP, function() {
-   console.log("Server has started..."); 
+   console.log("GymConnect server has started..."); 
 });
