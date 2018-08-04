@@ -4,15 +4,24 @@
     <div class="col-md-9">
         <div class="img-thumbnail">
             <img class="img-fluid" src="<%= gym.image %>" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1024px-No_image_3x4.svg.png';">
-        <h4 class="float-right">Price: $<%= gym.price %>/month</h4>
-        <h4><%= gym.name %></h4>
-        <p><%= gym.description %></p>
-        <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
-        <form class="delete-form" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
-            <button class="btn btn-danger">Delete</button>
-        </form>
+            <h4 class="float-right">Price: $<%= gym.price %>/month</h4>
+            <h4><%= gym.name %></h4>
+            <p><%= gym.description %></p>
+            <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
+            <form class="delete-form" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete</button>
+            </form>
         </div>
-        
+        <a class="btn btn-success" href="/gyms/<%= gym._id %>/comments/new">Add New Comment</a>
+        <% gym.comments.forEach(function(comment) { %>
+            <p>
+                <%= comment.author + " " + comment.text %>
+            </p>
+            <a class="btn btn-warning" href="/gyms/<%= gym._id %>/comments/<%= comment._id %>edit">Edit Comment</a>
+            <form class="delete-form" action="/gyms/<%= gym._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                <button class="btn btn-danger">Delete</button>
+            </form>
+        <% }); %>
     </div>
     
 </div>

@@ -6,7 +6,7 @@ var Gym = require("../models/gym.js");
 //    res.render("gyms.ejs"); 
 // });
 
-//View All Gyms
+//View All Gyms Route
 router.get("/gyms", function(req, res) {
     Gym.find({}, function(err, allGyms) {
         if(err) {
@@ -18,12 +18,12 @@ router.get("/gyms", function(req, res) {
     })
 });
 
-//Add New Gym
+//Add New Gym Route
 router.get("/gyms/new", function(req, res) {
    res.render("gyms/new.ejs"); 
 });
 
-//Post New Gym
+//Post New Gym Route
 router.post("/gyms", function(req, res) {
    var name = req.body.name;
    var image = req.body.image;
@@ -40,21 +40,22 @@ router.post("/gyms", function(req, res) {
       }
    });
 });
-
-//Show Gym
+ 
+//Show Gym Route
 router.get("/gyms/:id", function(req, res) {
-   Gym.findById(req.params.id, function(err, foundGym) {
+   Gym.findById(req.params.id).populate("comments").exec(function(err, foundGym) {
       if(err) {
          console.log(err);
          res.redirect("back");
       }
       else {
+         // console.log(foundGym);
          res.render("gyms/show.ejs", {gym: foundGym});
       }
    });
 });
 
-//Edit Gym
+//Edit Gym Route
 router.get("/gyms/:id/edit", function(req, res) {
    Gym.findById(req.params.id, function(err, foundGym) {
       if(err) {
@@ -67,7 +68,7 @@ router.get("/gyms/:id/edit", function(req, res) {
    });
 });
 
-//Update Gym
+//Update Gym Route
 router.put("/gyms/:id", function(req, res) {
    Gym.findByIdAndUpdate(req.params.id, req.body.gym, function(err, updatedGym) {
       if(err) {
@@ -81,7 +82,7 @@ router.put("/gyms/:id", function(req, res) {
    });
 });
 
-// Delete Gym
+// Delete Gym Route
 router.delete("/gyms/:id", function(req, res) {
    Gym.findByIdAndDelete(req.params.id, function(err, foundGym) {
       if(err) {
