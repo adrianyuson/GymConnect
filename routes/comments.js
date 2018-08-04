@@ -41,9 +41,33 @@ router.post("/gyms/:id/comments", function(req,res) {
    });
 });
 
+//Edit Comment Route
+router.get("/gyms/:id/comments/:comment_id/edit", function(req, res) {
+    Gym.findById(req.params.id, function(err, gym) {
+       if(err) {
+           console.log(err);
+           res.redirect("back");
+       } 
+       else {
+          Comment.findById(req.params.comment_id, function(err, comment) {
+             if(err) {
+                console.log(err);
+                res.redirect("back");
+             }
+             else {
+                 res.render("comments/edit.ejs", {gym: gym, comment: comment});
+             }
+          });
+       }
+    });
+});
+
+//Update Comment Route
+
+
 //Delete Comment Route
 router.delete("/gyms/:id/comments/:comment_id", function(req, res) {
-   Comment.findByIdAndRemove(req.params.comment_id, function(err, foundComment) {
+   Comment.findByIdAndRemove(req.params.comment_id, function(err, comment) {
        if(err) {
            console.log(err);
            res.redirect("back");
