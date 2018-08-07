@@ -16,12 +16,14 @@
     <div id="infowindow-content">
       <img src="" width="16" height="16" id="place-icon">
       <span id="place-name" class="title"></span><br>
+      <span id="place-id"></span>
       <span id="place-address"></span>
     </div>
-    
-    <div>
-        <a class="btn btn-primary btn-lg" href="/gyms/new">Add New Gym</a>
-    </div>
+    <% if(currentUser) { %>
+        <div>
+            <a class="btn btn-primary btn-lg" href="/gyms/new">Add New Gym</a>
+        </div>
+    <% } %>
     <div class="row text-center">
         <% gyms.forEach (function(gym) { %>
         <div class="col-md-6">

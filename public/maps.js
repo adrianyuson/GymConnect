@@ -91,6 +91,7 @@ function initMap() {
 
       infowindowContent.children['place-icon'].src = place.icon;
       infowindowContent.children['place-name'].textContent = place.name;
+      infowindowContent.children['place-id'].textContent = place.place_id;
       infowindowContent.children['place-address'].textContent = address;
       infowindow.open(map, marker);
     });

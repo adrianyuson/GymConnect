@@ -45,7 +45,7 @@ router.post("/gyms/:id/comments", middleware.isLoggedIn, function(req,res) {
 });
 
 //Edit Comment Route
-router.get("/gyms/:id/comments/:comment_id/edit", function(req, res) {
+router.get("/gyms/:id/comments/:comment_id/edit", middleware.checkCommentOwnership, function(req, res) {
     Gym.findById(req.params.id, function(err, gym) {
        if(err) {
            console.log(err);
@@ -66,10 +66,20 @@ router.get("/gyms/:id/comments/:comment_id/edit", function(req, res) {
 });
 
 //Update Comment Route
-
+router.put("/gyms/:id/comments/:comment_id", middleware.checkCommentOwnership, function(req, res) {
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, gym) {
+        if(err) {
+           console.log(err);
+           res.redirect("back");
+       } 
+       else {
+           res.redirect("/gyms/" + req.params.id);
+       }
+    }); 
+});
 
 //Delete Comment Route
-router.delete("/gyms/:id/comments/:comment_id", function(req, res) {
+router.delete("/gyms/:id/comments/:comment_id", middleware.checkCommentOwnership, function(req, res) {
    Comment.findByIdAndRemove(req.params.comment_id, function(err, comment) {
        if(err) {
            console.log(err);

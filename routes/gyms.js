@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Gym = require("../models/gym.js");
+var middleware = require("../middleware/index.js");
 
 // router.get("/gyms", function(req, res) {
 //    res.render("gyms.ejs"); 
@@ -19,18 +20,23 @@ router.get("/gyms", function(req, res) {
 });
 
 //Add New Gym Route
-router.get("/gyms/new", function(req, res) {
+router.get("/gyms/new", middleware.isLoggedIn, function(req, res) {
    res.render("gyms/new.ejs"); 
 });
 
 //Post New Gym Route
-router.post("/gyms", function(req, res) {
+router.post("/gyms", middleware.isLoggedIn, function(req, res) {
    var name = req.body.name;
    var image = req.body.image;
    var description = req.body.description;
    var price = req.body.price;
-   var newGym = { name: name, image: image, description: description, price: price };
-   
+   var author = {
+        id: req.user._id,
+        username: req.user.username
+   }
+   author.id = req.user._id;
+   author.username = req.user.username;
+   var newGym = { name: name, image: image, description: description, author,  price: price };
    Gym.create(newGym, function(err, newGym) {
       if(err) {
          console.log(err)
@@ -56,7 +62,7 @@ router.get("/gyms/:id", function(req, res) {
 });
 
 //Edit Gym Route
-router.get("/gyms/:id/edit", function(req, res) {
+router.get("/gyms/:id/edit", middleware.checkGymOwnership, function(req, res) {
    Gym.findById(req.params.id, function(err, foundGym) {
       if(err) {
          console.log(err);
@@ -69,7 +75,7 @@ router.get("/gyms/:id/edit", function(req, res) {
 });
 
 //Update Gym Route
-router.put("/gyms/:id", function(req, res) {
+router.put("/gyms/:id", middleware.checkGymOwnership, function(req, res) {
    Gym.findByIdAndUpdate(req.params.id, req.body.gym, function(err, updatedGym) {
       if(err) {
          res.redirect("/gyms");
@@ -83,7 +89,7 @@ router.put("/gyms/:id", function(req, res) {
 });
 
 // Delete Gym Route
-router.delete("/gyms/:id", function(req, res) {
+router.delete("/gyms/:id", middleware.checkGymOwnership, function(req, res) {
    Gym.findByIdAndDelete(req.params.id, function(err, foundGym) {
       if(err) {
          console.log(err);
