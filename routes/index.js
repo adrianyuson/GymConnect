@@ -13,7 +13,7 @@ router.get("/register", function(req, res) {
     res.render("register.ejs");
 });
 
-//Register logic
+//Register Logic Route
 router.post("/register", function(req, res) {
     var newUser = new User({username: req.body.username});
     User.register(newUser, req.body.password, function(err, user) {
@@ -32,5 +32,18 @@ router.get("/login", function(req, res) {
     res.render("login.ejs");
 });
 
+//Login Logic Route
+router.post("/login", passport.authenticate("local", 
+    {
+        successRedirect: "/gyms",
+        failureRedirect: "/login"
+    }), function(req, res) {
+});
+
+//Logout Route
+router.get("/logout", function(req,res) {
+   req.logout();
+   res.redirect("/gyms");
+});
 
 module.exports = router;

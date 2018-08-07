@@ -2,9 +2,10 @@ var express = require("express");
 var router = express.Router();
 var Gym = require("../models/gym.js");
 var Comment = require("../models/comment.js");
+var middleware = require("../middleware/index.js");
 
 //Create New Comment Route
-router.get("/gyms/:id/comments/new", function(req, res) {
+router.get("/gyms/:id/comments/new", middleware.isLoggedIn, function(req, res) {
     // res.render("comments/new.ejs");
    Gym.findById(req.params.id, function(err, gym) {
         if(err) {
@@ -18,7 +19,7 @@ router.get("/gyms/:id/comments/new", function(req, res) {
 });
 
 //Post New Comment Route
-router.post("/gyms/:id/comments", function(req,res) {
+router.post("/gyms/:id/comments", middleware.isLoggedIn, function(req,res) {
    Gym.findById(req.params.id, function(err, gym) {
       if(err) {
           console.log(err);
@@ -31,6 +32,8 @@ router.post("/gyms/:id/comments", function(req,res) {
                   res.redirect("back");
               }
               else {
+                  comment.author.id = req.user._id;
+                  comment.author.username = req.user.username;
                   comment.save();
                   gym.comments.push(comment);
                   gym.save();
