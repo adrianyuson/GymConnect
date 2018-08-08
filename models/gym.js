@@ -5,6 +5,9 @@ var gymSchema = new Schema({
     name:  String,
     image: String,
     description: String,
+    location: String,
+    lat: Number,
+    lng: Number,
     price: Number,
     author: {
       id: {
