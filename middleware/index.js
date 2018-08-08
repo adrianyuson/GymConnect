@@ -22,7 +22,6 @@ middlewareObj.checkGymOwnership = function(req, res, next) {
     }
     else {
         console.log("No permission");
-        res.redirect("back");
     }
 }
 
@@ -46,7 +45,6 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
     }
     else {
         console.log("No permission");
-        res.redirect("back");
     }
 }
 

@@ -48,8 +48,8 @@ function initMap() {
     autocomplete.bindTo('bounds', map);
 
     // Set the data fields to return when the user selects a place.
-    autocomplete.setFields(
-        ['address_components', 'geometry', 'icon', 'name']);
+    // autocomplete.setFields(
+    //     ['address_components', 'geometry', 'icon', 'name', 'place_id']);
 
     var infowindow = new google.maps.InfoWindow();
     var infowindowContent = document.getElementById('infowindow-content');
@@ -63,6 +63,7 @@ function initMap() {
       infowindow.close();
       marker.setVisible(false);
       var place = autocomplete.getPlace();
+      console.log(place);
       if (!place.geometry) {
         // User entered the name of a Place that was not suggested and
         // pressed the Enter key, or the Place Details request failed.
@@ -91,7 +92,7 @@ function initMap() {
 
       infowindowContent.children['place-icon'].src = place.icon;
       infowindowContent.children['place-name'].textContent = place.name;
-      infowindowContent.children['place-id'].textContent = place.place_id;
+    //   infowindowContent.children['place-id'].textContent = place.place_id; //for later use
       infowindowContent.children['place-address'].textContent = address;
       infowindow.open(map, marker);
     });

@@ -10,6 +10,7 @@ var methodOverride = require("method-override");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var User = require("./models/user.js");
+var flash = require("connect-flash");
 
 var mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost:27017/gymconnect", { useNewUrlParser: true });
@@ -25,6 +26,7 @@ app.use(require("express-session")({
     saveUninitialized: false
 }));
 
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()));
@@ -33,6 +35,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use(function(req, res, next) {
     res.locals.currentUser = req.user;
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
     next();
 });
 

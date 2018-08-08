@@ -7,10 +7,15 @@
             <h4 class="float-right">Price: $<%= gym.price %>/month</h4>
             <h4><%= gym.name %></h4>
             <p><%= gym.description %></p>
-            <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
-            <form class="delete-form" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
-                <button class="btn btn-danger">Delete</button>
-            </form>
+            <p class="text-secondary">
+                <em>Submitted By <%= gym.author.username %></em>
+            </p>
+            <% if(currentUser && currentUser._id.equals(gym.author.id)) { %>
+                <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
+                <form class="delete-form" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+            <% } %>
         </div>
         <a class="btn btn-success" href="/gyms/<%= gym._id %>/comments/new">Add New Comment</a>
         <ul class="list-unstyled">
@@ -21,10 +26,12 @@
                         <strong><%= comment.author.username %></strong> - <%= comment.text %>
                     </p>
                 </div>
-                <a class="btn btn-light" href="/gyms/<%= gym._id %>/comments/<%= comment._id %>/edit">Edit Comment</a>
-                <form class="delete-form" action="/gyms/<%= gym._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
-                    <button class="btn btn-light">Delete</button>
-                </form>
+                <% if(currentUser && currentUser._id.equals(comment.author.id)) { %>
+                    <a class="btn btn-light" href="/gyms/<%= gym._id %>/comments/<%= comment._id %>/edit">Edit Comment</a>
+                    <form class="delete-form" action="/gyms/<%= gym._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-light">Delete</button>
+                    </form>
+                <% } %>
             </li>
             <% }); %>
         </ul>
