@@ -6,11 +6,11 @@
         <form action="/gyms" method="POST">
             <div class="form-group">
                 <label for="name" id="name">Name</label>
-                <input class="form-control" type="text" name="name" placeholder="name">
+                <input class="form-control" type="text" name="name" placeholder="name" required>
             </div>
             <div class="form-group">
                 <label for="name" id="image">Image</label>
-                <input class="form-control" type="text" name="image" placeholder="image url">
+                <input class="form-control" type="text" name="image" placeholder="image url" required>
             </div>
             <div class="form-group">
                 <label for="name" id="description">Description</label>
@@ -18,11 +18,11 @@
             </div> 
             <div class="form-group">
                 <label for="name" id="location">Location</label>
-                <input class="form-control" type="text" name="location" placeholder="location">
+                <input class="form-control pac-input" type="text" name="location" placeholder="location" required>
             </div>
             <div class="form-group">
                 <label for="name" id="price">Price</label>
-                <input class="form-control" type="number" name="price" placeholder="price" min="1" step="1">
+                <input class="form-control" type="number" name="price" placeholder="price" max="1000" min="1" step="1" required>
             </div>
             <div class="form-group">
                 <button class="btn btn-lg btn-outline-secondary btn-block">Submit</button>

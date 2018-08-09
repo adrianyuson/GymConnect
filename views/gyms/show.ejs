@@ -1,7 +1,8 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <div class="col-md-9">
+    <div class="row">
+        <div class="col-md-9">
         <div class="img-thumbnail mb-4">
             <img class="img-fluid" src="<%= gym.image %>" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/No_image_3x4.svg/1024px-No_image_3x4.svg.png';">
             <h4 class="float-right">Price: $<%= gym.price %>/month</h4>
@@ -17,7 +18,9 @@
                 </form>
             <% } %>
         </div>
-        <a class="btn btn-success" href="/gyms/<%= gym._id %>/comments/new">Add New Comment</a>
+        <% if(currentUser) { %>
+            <a class="btn btn-success" href="/gyms/<%= gym._id %>/comments/new">Add New Comment</a>
+        <% } %>
         <ul class="list-unstyled">
             <% gym.comments.forEach(function(comment) { %>
             <li class="media">
@@ -36,7 +39,42 @@
             <% }); %>
         </ul>
     </div>
+    <div class="col-md-3">
+        <div id="map"></div>
+    </div>
+    </div>
     
 </div>
+
+<script>
+    function initMap() {
+    var lat = <%= gym.lat %>;
+    var lng = <%= gym.lng %>;
+    var center = { lat: lat, lng: lng };
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 15,
+        center: center,
+    });
+    var contentString = `
+      <strong><%= gym.name %></strong><br />
+      <%= gym.location %>
+    `
+    var infowindow = new google.maps.InfoWindow({
+        content: contentString,
+        maxWidth: 200
+    });
+    var marker = new google.maps.Marker({
+        position: center,
+        map: map
+    });
+    marker.addListener('click', function() {
+        infowindow.open(map, marker);
+    });
+}
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPpqP6eoq_mPyRBOeMOuHbjLICK840nyI&libraries=places&callback=initMap"
+    async defer></script>
 
 <% include ../partials/footer %>
