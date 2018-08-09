@@ -1,6 +1,6 @@
 <% include ../partials/header %>
 
-<div class="container">
+<div class="container mt-5">
     <div class="row">
         <div class="col-md-9">
         <div class="img-thumbnail mb-4">
@@ -9,7 +9,7 @@
             <h4><%= gym.name %></h4>
             <p><%= gym.description %></p>
             <p class="text-secondary">
-                <em>Submitted By <%= gym.author.username %></em>
+                <em>Submitted By <%= gym.author.username %>, <%= moment(gym.createdAt).fromNow() %></em>
             </p>
             <% if(currentUser && currentUser._id.equals(gym.author.id)) { %>
                 <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
@@ -27,7 +27,9 @@
                 <div class="media-body">
                     <p class="pt-2">
                         <strong><%= comment.author.username %></strong> - <%= comment.text %>
+                        <span class="text-info"><%= moment(comment.createdAt).fromNow() %></span>
                     </p>
+                    
                 </div>
                 <% if(currentUser && currentUser._id.equals(comment.author.id)) { %>
                     <a class="btn btn-light" href="/gyms/<%= gym._id %>/comments/<%= comment._id %>/edit">Edit Comment</a>
@@ -38,12 +40,15 @@
             </li>
             <% }); %>
         </ul>
+        </div>
+        <div class="col-md-3">
+            <div id="map"></div>
+            <div class="list-group">
+                <li class="list-group-item"><a class="text-dark" href="gyms/<%= gym._id %>/trainers">Personal Trainers</a></li>
+                <li class="list-group-item"><a class="text-dark" href="/gyms/<%= gym._id %>/classes">Classes</a></li>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3">
-        <div id="map"></div>
-    </div>
-    </div>
-    
 </div>
 
 <script>

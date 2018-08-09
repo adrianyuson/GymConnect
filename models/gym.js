@@ -9,6 +9,7 @@ var gymSchema = new Schema({
     lat: Number,
     lng: Number,
     price: Number,
+    createdAt: { type: Date, default: Date.now },
     author: {
       id: {
          type: mongoose.Schema.Types.ObjectId,
