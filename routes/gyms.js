@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var Gym = require("../models/gym.js");
 var middleware = require("../middleware/index.js");
-var  NodeGeocoder = require('node-geocoder');
+var NodeGeocoder = require('node-geocoder');
  
 var options = {
   provider: 'google',

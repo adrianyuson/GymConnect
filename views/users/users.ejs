@@ -1,0 +1,18 @@
+<% include ../partials/header %>
+
+<div class="container">
+    <h1 class="mt-5">List of Users</h2>
+    <ul class="list-unstyled">
+        <% users.forEach(function(user) { %>
+        <li class=""><a href="/users/<%= user._id %>"><strong><%= user.username %></strong></a> 
+            <% if(user.isAdmin) { %>
+            - Admin
+            <% } else {%>
+            - Member
+            <% } %>
+        </li>
+        <% }); %>
+    </ul>
+</div>
+
+<% include ../partials/footer %>

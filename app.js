@@ -4,6 +4,7 @@ var express = require("express");
 var app = express();
 var gymRoutes = require("./routes/gyms.js");
 var commentRoutes = require("./routes/comments.js");
+var userRoutes = require("./routes/users.js");
 var indexRoutes = require("./routes/index.js");
 var bodyParser = require("body-parser");
 var methodOverride = require("method-override");
@@ -44,6 +45,7 @@ app.use(function(req, res, next) {
 app.use(gymRoutes);
 app.use(commentRoutes);
 app.use(indexRoutes);
+app.use(userRoutes);
 
 app.listen(process.env.PORT, process.env.IP, function() {
    console.log("GymConnect server has started..."); 

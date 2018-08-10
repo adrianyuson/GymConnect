@@ -10,6 +10,7 @@
             <a class="navbar-brand" href="/">GymConnect</a>
             <ul class="nav navbar-nav float-left">
               <a class="nav-item nav-link" href="/gyms">Home</a>
+              <a class="nav-item nav-link" href="/users">Users</a>
             </ul>
             <div class="navbar-collapse">
                 <div class="navbar-nav ml-auto">
@@ -17,7 +18,7 @@
                         <a class="nav-item nav-link" href="/login">Login</a>
                         <a class="nav-item nav-link" href="/register">Sign Up</a>
                     <% } else { %>
-                        <a class="nav-item nav-link" href=""> Signed in as <%= currentUser.username %></a>
+                        <a class="nav-item nav-link" href="/users/<%= currentUser._id %>"> Signed in as <%= currentUser.username %></a>
                         <a class="nav-item nav-link" href="/logout">Log Out</a>
                     <% } %>
                 </div>

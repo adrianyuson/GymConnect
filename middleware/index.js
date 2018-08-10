@@ -14,7 +14,7 @@ middlewareObj.checkGymOwnership = function(req, res, next) {
                     next();
                 }
                 else {
-                    req.flash("error", err);
+                    req.flash("error", err.message);
                     res.redirect("back");
                 }
             }
@@ -38,7 +38,7 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
                     next();
                 }
                 else {
-                    console.log("No permission");
+                    req.flash("error", err.message);
                     res.redirect("back");
                 }
             }
@@ -50,10 +50,19 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
     }
 }
 
+middlewareObj.isAdmin = function(req, res, next) {
+    if (req.isAuthenticated() && req.user.isAdmin) {
+        return next();
+    }
+    req.flash("error", "You don't have admin permissions to do this");
+    res.redirect("/gyms");
+}
+
 middlewareObj.isLoggedIn = function(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
+    req.flash("error", "You need to be logged in to do this");
     res.redirect("/login");
 }
 
