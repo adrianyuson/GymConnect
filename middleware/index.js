@@ -10,11 +10,12 @@ middlewareObj.checkGymOwnership = function(req, res, next) {
                 res.redirect("back");
             }
             else {
-                if (gym.author.id.equals(req.user._id)) {
+                if (gym.author.id.equals(req.user._id) || req.user.isAdmin) {
                     next();
                 }
                 else {
-                    req.flash("error", err.message);
+                    console.log(err);
+                    req.flash("error", err);
                     res.redirect("back");
                 }
             }
@@ -34,11 +35,11 @@ middlewareObj.checkCommentOwnership = function(req, res, next) {
                 res.redirect("back");
             }
             else {
-                if (comment.author.id.equals(req.user._id)) {
+                if (comment.author.id.equals(req.user._id)  || req.user.isAdmin) {
                     next();
                 }
                 else {
-                    req.flash("error", err.message);
+                    req.flash("error", err);
                     res.redirect("back");
                 }
             }
