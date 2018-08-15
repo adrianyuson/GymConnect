@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 var gymSchema = new Schema({
     name:  String,
     image: String,
+    imageId: String,
     description: String,
     location: String,
     lat: Number,

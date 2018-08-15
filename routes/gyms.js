@@ -53,9 +53,14 @@ router.get("/gyms/new", middleware.isLoggedIn, function(req, res) {
 
 //Post New Gym Route
 router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req, res) {
-    cloudinary.uploader.upload(req.file.path, function(result) {
+    cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
+        if (err) {
+            req.flash("error", err);
+            return res.redirect("back");
+        }
         var name = req.body.name;
         var image = result.secure_url;
+        var imageId = result.public_id;
         var description = req.body.description;
         var price = req.body.price;
         var author = {
@@ -70,12 +75,13 @@ router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req
             var lat = data[0].latitude;
             var lng = data[0].longitude;
             var location = data[0].formattedAddress;
-            var newGym = { name: name, image: image, description: description, author, price: price, location: location, lat: lat, lng: lng };
+            var newGym = { name: name, image: image, imageId: imageId, description: description, author, price: price, location: location, lat: lat, lng: lng };
             Gym.create(newGym, function(err, newGym) {
                 if (err) {
                     req.flash(err);
                 }
                 else {
+                    console.log(newGym);
                     req.flash("success", name + " was added successfully");
                     res.redirect("/gyms");
                 }
@@ -112,30 +118,79 @@ router.get("/gyms/:id/edit", middleware.checkGymOwnership, function(req, res) {
 
 //Update Gym Route
 router.put("/gyms/:id", middleware.checkGymOwnership, upload.single("image"), function(req, res) {
-    cloudinary.uploader.upload(req.file.path, function(result) {
-        console.log(req.file);
-        geocoder.geocode(req.body.gym.location, function(err, data) {
-            if (err || !data.length) {
-                req.flash('error', 'Invalid address');
-                return res.redirect('back');
+    geocoder.geocode(req.body.gym.location, function(err, data) {
+        if (err || !data.length) {
+            req.flash('error', 'Invalid address');
+            res.redirect('back');
+        }
+        Gym.findById(req.params.id, async function(err, gym) {
+            if (err) {
+                req.flash("error", err.message);
+                res.redirect("/gyms");
             }
-            req.body.gym.lat = data[0].latitude;
-            req.body.gym.lng = data[0].longitude;
-            req.body.gym.location = data[0].formattedAddress;
-            req.body.gym.image = result.secure_url;
-            Gym.findByIdAndUpdate(req.params.id, req.body.gym, function(err, updatedGym) {
-                if (err) {
-                    req.flash("error", err);
-                    res.redirect("/gyms");
+            else {
+                gym.name = req.body.gym.name;
+                gym.description = req.body.gym.description;
+                gym.lat = data[0].latitude;
+                gym.lng = data[0].longitude;
+                gym.location = data[0].formattedAddress;
+                gym.price = req.body.gym.price;
+                if (req.file) {
+                    try {
+                        await cloudinary.v2.uploader.destroy(gym.imageId);
+                        var result = await cloudinary.v2.uploader.upload(req.file.path);
+                        gym.imageId = result.public_id;
+                        gym.image = result.secure_url;
+                    }
+                    catch (err) {
+                        req.flash("error", err.message);
+                        return res.redirect("back");
+                    }
                 }
-                else {
-                    req.flash("success", req.body.gym.name + " was updated successfully");
-                    res.redirect("/gyms/" + req.params.id);
-                }
-            });
+                gym.save();
+                req.flash("success", req.body.gym.name + " was updated successfully");
+                res.redirect("/gyms/" + req.params.id);
+            }
         });
     });
 });
+
+// //Update Gym Route
+// router.put("/gyms/:id", middleware.checkGymOwnership, upload.single("image"), function(req, res) {
+//     geocoder.geocode(req.body.gym.location, async function(err, data) {
+//         if (err || !data.length) {
+//             req.flash('error', 'Invalid address');
+//             res.redirect('back');
+//         }
+//         req.body.gym.lat = data[0].latitude;
+//         req.body.gym.lng = data[0].longitude;
+//         req.body.gym.location = data[0].formattedAddress;
+//         if (req.file) {
+//             try {
+//                 // await cloudinary.v2.uploader.destroy(req.body.gym.imageId);
+//                 var result = await cloudinary.v2.uploader.upload(req.file.path);
+//                 req.body.gym.imageId = result.public_id;
+//                 req.body.gym.image = result.secure_url;
+//             }
+//             catch (err) {
+//                 console.log(req.body.gym.imageId);
+//                 console.log(req.body.gym.image);
+//                 req.flash("error", err.message);
+//                 return res.redirect("back");
+//             }
+//         }
+//         Gym.findByIdAndUpdate(req.params.id, req.body.gym, function(err, updatedGym) {
+//             if (err) {
+//                 req.flash("error", err.message);
+//                 res.redirect("/gyms");
+//             }
+//             else {
+//                 req.flash("success", req.body.gym.name + " was updated successfully");
+//                 res.redirect("/gyms/" + req.params.id);
+//             }
+//         });
+//     });
+// });
 
 //Delete Gym Route
 router.delete("/gyms/:id", middleware.checkGymOwnership, function(req, res) {
