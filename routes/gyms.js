@@ -53,9 +53,9 @@ router.get("/gyms/new", middleware.isLoggedIn, function(req, res) {
 
 //Post New Gym Route
 router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req, res) {
-    cloudinary.v2.uploader.upload(req.file.path, function(err, result) {
+    cloudinary.v2.uploader.upload(req.file.path, { moderation: "webpurify" }, function(err, result) {
         if (err) {
-            req.flash("error", err);
+            req.flash("error", err.message);
             return res.redirect("back");
         }
         var name = req.body.name;
@@ -78,10 +78,10 @@ router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req
             var newGym = { name: name, image: image, imageId: imageId, description: description, author, price: price, location: location, lat: lat, lng: lng };
             Gym.create(newGym, function(err, newGym) {
                 if (err) {
-                    req.flash(err);
+                    req.flash(err.message);
+                    res.redirect("back");
                 }
                 else {
-                    console.log(newGym);
                     req.flash("success", name + " was added successfully");
                     res.redirect("/gyms");
                 }
@@ -92,26 +92,34 @@ router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req
 
 //Show Gym Route
 router.get("/gyms/:id", function(req, res) {
-    Gym.findById(req.params.id).populate("comments").exec(function(err, foundGym) {
+    Gym.findById(req.params.id).populate("comments").exec(function(err, gym) {
         if (err) {
             req.flash("error", err);;
             res.redirect("back");
         }
         else {
-            res.render("gyms/show.ejs", { gym: foundGym });
+            // Check if the image is approved or rejected by Webpurify
+            cloudinary.api.resource(gym.imageId, function(result) { 
+                if (result.moderation[0].status == "rejected") {
+                    // Change the rejected to an acceptable image
+                    gym.image = "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
+                    gym.save();
+                }
+            });
+            res.render("gyms/show.ejs", { gym: gym });
         }
     });
 });
 
 //Edit Gym Route
 router.get("/gyms/:id/edit", middleware.checkGymOwnership, function(req, res) {
-    Gym.findById(req.params.id, function(err, foundGym) {
+    Gym.findById(req.params.id, function(err, gym) {
         if (err) {
             req.flash("error", err);
             res.redirect("back");
         }
         else {
-            res.render("gyms/edit.ejs", { gym: foundGym });
+            res.render("gyms/edit.ejs", { gym: gym });
         }
     });
 });
@@ -155,52 +163,16 @@ router.put("/gyms/:id", middleware.checkGymOwnership, upload.single("image"), fu
     });
 });
 
-// //Update Gym Route
-// router.put("/gyms/:id", middleware.checkGymOwnership, upload.single("image"), function(req, res) {
-//     geocoder.geocode(req.body.gym.location, async function(err, data) {
-//         if (err || !data.length) {
-//             req.flash('error', 'Invalid address');
-//             res.redirect('back');
-//         }
-//         req.body.gym.lat = data[0].latitude;
-//         req.body.gym.lng = data[0].longitude;
-//         req.body.gym.location = data[0].formattedAddress;
-//         if (req.file) {
-//             try {
-//                 // await cloudinary.v2.uploader.destroy(req.body.gym.imageId);
-//                 var result = await cloudinary.v2.uploader.upload(req.file.path);
-//                 req.body.gym.imageId = result.public_id;
-//                 req.body.gym.image = result.secure_url;
-//             }
-//             catch (err) {
-//                 console.log(req.body.gym.imageId);
-//                 console.log(req.body.gym.image);
-//                 req.flash("error", err.message);
-//                 return res.redirect("back");
-//             }
-//         }
-//         Gym.findByIdAndUpdate(req.params.id, req.body.gym, function(err, updatedGym) {
-//             if (err) {
-//                 req.flash("error", err.message);
-//                 res.redirect("/gyms");
-//             }
-//             else {
-//                 req.flash("success", req.body.gym.name + " was updated successfully");
-//                 res.redirect("/gyms/" + req.params.id);
-//             }
-//         });
-//     });
-// });
-
 //Delete Gym Route
 router.delete("/gyms/:id", middleware.checkGymOwnership, function(req, res) {
-    Gym.findByIdAndDelete(req.params.id, function(err, foundGym) {
+    Gym.findByIdAndDelete(req.params.id, async function(err, gym) {
         if (err) {
             req.flash("error", err);
             res.redirect("back");
         }
         else {
-            req.flash("success", foundGym.name + " was deleted successfully");
+            await cloudinary.v2.uploader.destroy(gym.imageId);
+            req.flash("success", gym.name + " was deleted successfully");
             res.redirect("/gyms");
         }
     });
