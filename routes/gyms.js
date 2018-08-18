@@ -93,9 +93,9 @@ router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req
 //Show Gym Route
 router.get("/gyms/:id", function(req, res) {
     Gym.findById(req.params.id).populate("comments").exec(function(err, gym) {
-        if (err) {
-            req.flash("error", err);;
-            res.redirect("back");
+        if (err || !gym) {
+            req.flash("error", "Invalid link");;
+            res.redirect("/gyms");
         }
         else {
             // Check if the image is approved or rejected by Webpurify

@@ -46,15 +46,15 @@ router.post("/gyms/:id/comments", middleware.isLoggedIn, function(req, res) {
 //Edit Comment Route
 router.get("/gyms/:id/comments/:comment_id/edit", middleware.checkCommentOwnership, function(req, res) {
     Gym.findById(req.params.id, function(err, gym) {
-        if (err) {
-            req.flash("error", err);
-            res.redirect("back");
+        if (err || !gym) {
+            req.flash("error", "Invalid link");
+            res.redirect("/gyms");
         }
         else {
             Comment.findById(req.params.comment_id, function(err, comment) {
-                if (err) {
-                    req.flash("error", err);
-                    res.redirect("back");
+                if (err || !comment) {
+                    req.flash("error", "Invalid link");
+                    res.redirect("/gyms");
                 }
                 else {
                     res.render("comments/edit.ejs", { gym: gym, comment: comment });

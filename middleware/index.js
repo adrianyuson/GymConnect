@@ -5,8 +5,8 @@ var middlewareObj = {};
 middlewareObj.checkGymOwnership = function(req, res, next) {
     if (req.isAuthenticated()) {
         Gym.findById(req.params.id, function(err, gym) {
-            if (err) {
-                console.log(err);
+            if (err || !gym) {
+                req.flash("error", "Gym not found");
                 res.redirect("back");
             }
             else {
@@ -30,9 +30,9 @@ middlewareObj.checkGymOwnership = function(req, res, next) {
 middlewareObj.checkCommentOwnership = function(req, res, next) {
     if (req.isAuthenticated()) {
         Comment.findById(req.params.comment_id, function(err, comment) {
-            if (err) {
-                console.log(err);
-                res.redirect("back");
+            if (err || !comment) {
+                req.flash("error", "Comment not found");
+                res.redirect("/gyms");
             }
             else {
                 if (comment.author.id.equals(req.user._id)  || req.user.isAdmin) {
