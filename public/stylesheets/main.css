@@ -25,3 +25,13 @@
 .delete-form {
     display: inline;
 }
+
+.default-form {
+    width: 30%; 
+    margin: auto;
+}
+
+.comment-form {
+    width: 50%; 
+    margin: auto;
+}

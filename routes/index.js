@@ -15,7 +15,11 @@ router.get("/register", function(req, res) {
 
 //Register Logic Route
 router.post("/register", function(req, res) {
-    var newUser = new User({ username: req.body.username });
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var bio = req.body.bio;
+    var newUser = new User({ username: req.body.username, firstName: firstName, lastName: lastName, email: email});
     User.register(newUser, req.body.password, function(err, user) {
         if (err) {
             req.flash("error", err.message);

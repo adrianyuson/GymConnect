@@ -1,7 +1,17 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <h1 class="mt-5"><%= user.username %></h2>
+    <h1><%= user.username %></h2>
+    <div><%= user.firstName + " " + user.lastName %></div>
+    <div><%= user.email %></div>
+    <div style="width: 30%">
+        <h4>Gyms posted:</h4>
+        <% gyms.forEach(function(gym) { %>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="/gyms/<%= gym.id %>"><%= gym.name %></a></li>
+        </ul>
+        <% }); %>
+    </div>
     <div class="mt-5">
         <% if(user.isAdmin) { %>
             <form action="/users/<%= user._id %>?_method=PUT" method="POST">

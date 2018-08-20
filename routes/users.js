@@ -1,13 +1,14 @@
 var express = require("express");
 var router = express.Router();
 var User = require("../models/user.js");
+var Gym = require("../models/gym.js");
 var middleware = require("../middleware/index.js");
 
 //All Users Page Route
-router.get("/users", middleware.isAdmin, function(req, res) {
+router.get("/users", function(req, res) {
     User.find({}, function(err, allUsers) {
         if (err) {
-            req.flash("err", err.message);
+            req.flash("error", err.message);
             res.redirect("back");
         }
         else {
@@ -17,13 +18,21 @@ router.get("/users", middleware.isAdmin, function(req, res) {
 });
 
 //User Page Route
-router.get("/users/:user_id", middleware.isAdmin, function(req, res) {
+router.get("/users/:user_id", function(req, res) {
     User.findById(req.params.user_id, function(err, user) {
-        if (err) {
-            req.flash("err", err.message);
-            return res.redirect("back");
+        if (err || !user) {
+            req.flash("error", "Invalid user");
+            res.redirect("/gyms");
         }
-        res.render("users/user.ejs", { user: user });
+        else {
+            Gym.find().where("author.id").equals(user._id).exec(function(err, gyms) {
+                if (err || !gyms) {
+                    req.flash("error", "Something went wrong");
+                    res.redirect("back");
+                }
+                res.render("users/user.ejs", { user: user, gyms: gyms });
+            });
+        }
     });
 });
 
@@ -34,11 +43,10 @@ router.put("/users/:user_id", middleware.isAdmin, function(req, res) {
         isAdmin = true;
     }
     User.findById(req.params.user_id, function(err, user) {
-        
         user.isAdmin = isAdmin;
         user.save();
         if (err) {
-            req.flash("err", err.message);
+            req.flash("error", err.message);
             return res.redirect("back");
         }
         res.redirect("/users");
