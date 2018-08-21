@@ -22,8 +22,15 @@
     color: black;
 }
 
-.delete-form {
+.delete-comment {
     display: inline;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.delete-comment:hover {
+    text-decoration: underline;
 }
 
 .default-form {
@@ -34,4 +41,9 @@
 .comment-form {
     width: 50%; 
     margin: auto;
+}
+
+.gym-comment {
+    word-wrap: break-word;
+    background: #f7f8f9;
 }

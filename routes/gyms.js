@@ -102,7 +102,6 @@ router.get("/gyms/:id", function(req, res) {
             cloudinary.api.resource(gym.imageId, function(result) { 
                 if (result.moderation[0].status == "rejected") {
                     // Change the rejected to an acceptable image
-                    
                     gym.image = "https://res.cloudinary.com/standard/image/upload/v1534646003/NoImageAvailable.jpg";
                     gym.save();
                 }

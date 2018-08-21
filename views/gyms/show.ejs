@@ -19,25 +19,32 @@
             <% } %>
         </div>
         <% if(currentUser) { %>
-            <a class="btn btn-success" href="/gyms/<%= gym._id %>/comments/new">Add New Comment</a>
+            <a class="btn btn-success mb-2" href="/gyms/<%= gym._id %>/comments/new">Add New Comment</a>
         <% } %>
         <ul class="list-unstyled">
             <% gym.comments.forEach(function(comment) { %>
-            <li class="media">
-                <div class="media-body">
-                    <p class="pt-2">
-                        <strong><%= comment.author.username %></strong> - <%= comment.text %>
-                        <span class="text-info"><%= moment(comment.createdAt).fromNow() %></span>
+            <div class="mb-3 gym-comment">
+                <div>
+                    <p class="mb-0">
+                        <a href="/users/<%= comment.author.id %>"><strong><%= comment.author.username %></strong></a>
+                        <span class="text-secondary font-italic">(<%= moment(comment.createdAt).fromNow() %>)</span>
                     </p>
-                    
                 </div>
-                <% if(currentUser && currentUser._id.equals(comment.author.id)) { %>
-                    <a class="btn btn-light" href="/gyms/<%= gym._id %>/comments/<%= comment._id %>/edit">Edit Comment</a>
-                    <form class="delete-form" action="/gyms/<%= gym._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
-                        <button class="btn btn-light">Delete</button>
-                    </form>
-                <% } %>
-            </li>
+                <div>
+                    <%= comment.text %>
+                </div>
+                <div class="font-weight-bold">
+                    <% if(currentUser && currentUser._id.equals(comment.author.id)) { %>
+                    <div class="list-unstyled pl-0">
+                        <a class="text-secondary" href="/gyms/<%= gym._id %>/comments/<%= comment._id %>/edit">edit</a>
+                        <form class="d-inline" action="/gyms/<%= gym._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                            <button class="text-secondary delete-comment">delete</button>
+                        </form>
+                    </div>
+                    <% } %>
+                </div>
+                
+            </div>
             <% }); %>
         </ul>
         </div>
