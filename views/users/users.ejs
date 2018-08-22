@@ -1,10 +1,10 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <h1 class="mt-5">List of Members</h2>
+    <h1>List of Members</h2>
     <ul class="list-unstyled">
         <% users.forEach(function(user) { %>
-        <li class=""><a href="/users/<%= user._id %>"><strong><%= user.username %></strong></a> 
+        <li><a href="/users/<%= user._id %>"><strong><%= user.username %></strong></a> 
             <% if(user.isAdmin) { %>
             <span>- Admin</span>
             <% } else {%>

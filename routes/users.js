@@ -36,20 +36,41 @@ router.get("/users/:user_id", function(req, res) {
     });
 });
 
-//User Page Post Route
-router.put("/users/:user_id", middleware.isAdmin, function(req, res) {
+//Edit User Profile Route
+router.get("/users/:user_id/edit", middleware.isLoggedIn, function(req, res) {
+    User.findById(req.params.user_id, function(err, user) {
+        if (err || !user) {
+            req.flash("error", err);
+            res.redirect("back");
+        }
+        else {
+            res.render("users/edit.ejs", { user: user });
+        }
+    });
+});
+
+//Update User Profile Route
+router.put("/users/:user_id", middleware.isLoggedIn, function(req, res) {
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
+    var email = req.body.email;
+    var bio = req.body.bio;
     var isAdmin = false;
     if (req.body.isAdmin) {
         isAdmin = true;
     }
     User.findById(req.params.user_id, function(err, user) {
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.email = email;
+        user.bio = bio;
         user.isAdmin = isAdmin;
         user.save();
         if (err) {
             req.flash("error", err.message);
             return res.redirect("back");
         }
-        res.redirect("/users");
+        res.redirect("/users/" + req.params.user_id);
     });
 });
 

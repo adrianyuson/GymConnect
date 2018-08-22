@@ -1,33 +1,31 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <h1><%= user.username %></h2>
-    <div><%= user.firstName + " " + user.lastName %></div>
-    <div><%= user.email %></div>
-    <div style="width: 30%">
-        <h4>Gyms posted:</h4>
-        <% gyms.forEach(function(gym) { %>
-        <ul class="list-group">
-            <li class="list-group-item"><a href="/gyms/<%= gym.id %>"><%= gym.name %></a></li>
-        </ul>
-        <% }); %>
-    </div>
-    <div class="mt-5">
-        <% if(currentUser && currentUser.isAdmin) { %>
-            <% if(user.isAdmin) { %>
-                <form action="/users/<%= user._id %>?_method=PUT" method="POST">
-                    Admin <input type="checkbox" name="isAdmin" checked>
-                    <button class="btn">Submit</button>
-                </form>
-            <% } else { %>
-                <form action="/users/<%= user._id %>?_method=PUT" method="POST">
-                    Admin <input type="checkbox" name="isAdmin">
-                    <button class="btn">Submit</button>
-                </form>
+    <div class="row">
+        <div class="col">
+            <h1><%= user.username %></h2>
+            <div><%= user.firstName + " " + user.lastName %></div>
+            <div><%= user.email %></div>
+            <% if(user.bio != null) { %>
+                <p class="mt-2"><%= user.bio %></p>
             <% } %>
-        <% } %>
+            <% if(currentUser && currentUser.isAdmin || currentUser && currentUser.equals(user)) { %>
+                <div>
+                    <a href="/users/<%= user._id %>/edit" class="btn btn-sm btn-outline-secondary">Edit Profile</button></a>
+                </div>
+            <% } %>
+        </div>
+        <div class="col">
+            <% if(gyms.length > 0) { %>
+                <h4>Gym Posts:</h4>
+            <% } %>
+            <ul>
+                <% gyms.forEach(function(gym) { %>
+                    <li class=""><a href="/gyms/<%= gym.id %>"><%= gym.name %></a></li>
+                <% }); %>
+            </ul>
+        </div>
     </div>
-
 </div>
 
 <% include ../partials/footer %>
