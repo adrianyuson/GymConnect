@@ -13,8 +13,9 @@ var LocalStrategy = require("passport-local");
 var User = require("./models/user.js");
 var flash = require("connect-flash");
 
+var url = process.env.DATABASEURL || "mongodb://localhost:27017/gymconnect";
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/gymconnect", { useNewUrlParser: true });
+mongoose.connect(url, { useNewUrlParser: true });
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
