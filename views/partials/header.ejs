@@ -7,20 +7,24 @@
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="/">GymConnect</a>
-            <ul class="nav navbar-nav float-left">
-              <a class="nav-item nav-link" href="/gyms">Home</a>
-              <a class="nav-item nav-link" href="/users">Users</a>
-            </ul>
-            <div class="navbar-collapse">
-                <div class="navbar-nav ml-auto">
-                    <% if(!currentUser) { %>
-                        <a class="nav-item nav-link" href="/login">Login</a>
-                        <a class="nav-item nav-link" href="/register">Sign Up</a>
-                    <% } else { %>
-                        <a class="nav-item nav-link active" href="/users/<%= currentUser._id %>"><%= currentUser.username %></a>
-                        <a class="nav-item nav-link" href="/logout">Log Out</a>
-                    <% } %>
+            <div class="container">
+                <a class="navbar-brand" href="/">GymConnect</a>
+                <div class="navbar-collapse">
+                    <div class="navbar-nav">
+                        <a class="nav-link" href="/gyms">Home</a>
+                        <a class="nav-link" href="/users">Members</a>
+                    </div>
+                </div>
+                <div class="mr-auto">
+                    <div class="navbar-nav">
+                        <% if(!currentUser) { %>
+                            <a class="nav-link" href="/login">Login</a>
+                            <a class="nav-link" href="/register">Sign Up</a>
+                        <% } else { %>
+                            <a class="nav-link active" href="/users/<%= currentUser._id %>"><%= currentUser.username %></a>
+                            <a class="nav-link" href="/logout">Log Out</a>
+                        <% } %>
+                    </div>
                 </div>
             </div>
         </nav>

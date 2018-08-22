@@ -12,9 +12,9 @@
                 <em>Submitted By <%= gym.author.username %>, <%= moment(gym.createdAt).fromNow() %></em>
             </p>
             <% if(currentUser && currentUser._id.equals(gym.author.id) || currentUser && currentUser.isAdmin) { %>
-                <a class="btn btn-warning" href="/gyms/<%= gym._id %>/edit">Edit</a>
-                <form class="delete-form" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
-                    <button class="btn btn-danger">Delete</button>
+                <a class="btn btn-secondary btn-sm" href="/gyms/<%= gym._id %>/edit">Edit</a>
+                <form class="d-inline" action="/gyms/<%= gym._id %>?_method=DELETE" method="POST">
+                    <button class="btn btn-danger btn-sm">Delete</button>
                 </form>
             <% } %>
         </div>
@@ -26,7 +26,7 @@
             <div class="mb-3 gym-comment">
                 <div>
                     <p class="mb-0">
-                        <a href="/users/<%= comment.author.id %>"><strong><%= comment.author.username %></strong></a>
+                        <a class="text-dark" href="/users/<%= comment.author.id %>"><strong><%= comment.author.username %></strong></a>
                         <span class="text-secondary font-italic">(<%= moment(comment.createdAt).fromNow() %>)</span>
                     </p>
                 </div>
@@ -35,7 +35,7 @@
                 </div>
                 <div class="font-weight-bold">
                     <% if(currentUser && currentUser._id.equals(comment.author.id)) { %>
-                    <div class="list-unstyled pl-0">
+                    <div class="pl-0">
                         <a class="text-secondary" href="/gyms/<%= gym._id %>/comments/<%= comment._id %>/edit">edit</a>
                         <form class="d-inline" action="/gyms/<%= gym._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
                             <button class="text-secondary delete-comment">delete</button>

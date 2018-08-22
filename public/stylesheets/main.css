@@ -27,6 +27,7 @@
     background: none;
     border: none;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .delete-comment:hover {

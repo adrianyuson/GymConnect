@@ -1,24 +1,6 @@
 <% include ../partials/header %>
 
 <div class="container">
-    <!--<div id="map"></div>-->
-    <!--<div class="pac-card" id="pac-card">-->
-    <!--  <div>-->
-    <!--    <div id="title">-->
-    <!--      Gym Search-->
-    <!--    </div>-->
-    <!--  </div>-->
-    <!--  <div id="pac-container">-->
-    <!--    <input id="pac-input" type="text"-->
-    <!--        placeholder="Enter a location">-->
-    <!--  </div>-->
-    <!--</div>-->
-    <!--<div id="infowindow-content">-->
-    <!--  <img src="" width="16" height="16" id="place-icon">-->
-    <!--  <span id="place-name" class="title"></span><br>-->
-      <!--<span id="place-id"></span> //for future use-->
-    <!--  <span id="place-address"></span>-->
-    <!--</div>-->
     <div class="row text-center mb-5">
         <% gyms.forEach (function(gym) { %>
         <div class="col-md-6">
@@ -37,10 +19,5 @@
         </div>
     <% } %>
 </div>
-
-<!--<script src="/maps.js"></script>-->
-
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBPpqP6eoq_mPyRBOeMOuHbjLICK840nyI&libraries=places&callback=initMap"-->
-<!--    async defer></script>-->
 
 <% include ../partials/footer %>

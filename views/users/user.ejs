@@ -13,16 +13,18 @@
         <% }); %>
     </div>
     <div class="mt-5">
-        <% if(user.isAdmin) { %>
-            <form action="/users/<%= user._id %>?_method=PUT" method="POST">
-                Admin <input type="checkbox" name="isAdmin" checked>
-                <button class="btn">Submit</button>
-            </form>
-        <% } else { %>
-            <form action="/users/<%= user._id %>?_method=PUT" method="POST">
-                Admin <input type="checkbox" name="isAdmin">
-                <button class="btn">Submit</button>
-            </form>
+        <% if(currentUser && currentUser.isAdmin) { %>
+            <% if(user.isAdmin) { %>
+                <form action="/users/<%= user._id %>?_method=PUT" method="POST">
+                    Admin <input type="checkbox" name="isAdmin" checked>
+                    <button class="btn">Submit</button>
+                </form>
+            <% } else { %>
+                <form action="/users/<%= user._id %>?_method=PUT" method="POST">
+                    Admin <input type="checkbox" name="isAdmin">
+                    <button class="btn">Submit</button>
+                </form>
+            <% } %>
         <% } %>
     </div>
 
