@@ -9,7 +9,7 @@ var userSchema = new Schema({
     lastName: String,
     email: String,
     bio: String,
-    isAdmin: {type: Boolean, default: true}
+    isAdmin: {type: Boolean, default: false}
 });
 
 userSchema.plugin(passportLocalMongoose);

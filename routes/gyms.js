@@ -100,7 +100,7 @@ router.get("/gyms/:id", function(req, res) {
         else {
             // Check if the image is approved or rejected by Webpurify
             cloudinary.api.resource(gym.imageId, function(result) { 
-                if (result.moderation[0].status == "rejected") {
+                if (result.moderation && result.moderation[0].status == "rejected") {
                     // Change the rejected to an acceptable image
                     gym.image = "https://res.cloudinary.com/standard/image/upload/v1534646003/NoImageAvailable.jpg";
                     gym.save();

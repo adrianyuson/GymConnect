@@ -12,10 +12,13 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var User = require("./models/user.js");
 var flash = require("connect-flash");
+var seedDB = require("./seeds.js");
 
-var url = process.env.DATABASEURL || "mongodb://localhost:27017/gymconnect";
 var mongoose = require("mongoose");
+var url = process.env.DATABASEURL || "mongodb://localhost:27017/gymconnect";
+// var url = "mongodb://localhost:27017/gymconnect";
 mongoose.connect(url, { useNewUrlParser: true });
+seedDB();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + "/public"));
