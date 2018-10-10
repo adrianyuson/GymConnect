@@ -178,4 +178,14 @@ router.delete("/gyms/:id", middleware.checkGymOwnership, function(req, res) {
     });
 });
 
+//Personal Trainers Route
+router.get("/gyms/:gym_id/trainers", function(req, res) {
+   res.render("gyms/trainers.ejs"); 
+});
+
+//Gym Classes Route
+router.get("/gyms/:gym_id/classes", function(req, res) {
+   res.render("gyms/classes.ejs"); 
+});
+
 module.exports = router;
