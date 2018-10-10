@@ -69,6 +69,7 @@ router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req
         }
         geocoder.geocode(req.body.location, function(err, data) {
             if (err || !data.length) {
+                console.log(req.body.location + " " + data[0].latitude);
                 req.flash('error', 'Invalid address');
                 return res.redirect('back');
             }
@@ -76,7 +77,6 @@ router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req
             var lng = data[0].longitude;
             var location = data[0].formattedAddress;
             var newGym = { name: name, image: image, imageId: imageId, description: description, author, price: price, location: location, lat: lat, lng: lng };
-            console.log(req.body.location + " " + lat + " " + lng);
             Gym.create(newGym, function(err, newGym) {
                 if (err) {
                     req.flash(err.message);
