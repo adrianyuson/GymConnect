@@ -70,7 +70,7 @@ router.post("/gyms", middleware.isLoggedIn, upload.single("image"), function(req
         geocoder.geocode(req.body.location, function(err, data) {
             if (err || !data.length) {
                 console.log(err);
-                req.flash('error', err);
+                req.flash('error', err.message);
                 return res.redirect('back');
             }
             var lat = data[0].latitude;
