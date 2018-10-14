@@ -5,8 +5,9 @@
 
 #landing-header h1 {
   color: #fff;
+  font-weight: 600;
 }
 
-.blackbg {
-    background-color: black;
+body {
+    background-image: url(https://res.cloudinary.com/standard/image/upload/v1539490396/gym.jpg);
 }
