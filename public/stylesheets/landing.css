@@ -10,4 +10,5 @@
 
 body {
     background-image: url(https://res.cloudinary.com/standard/image/upload/v1539490396/gym.jpg);
+    background-repeat: no-repeat;
 }
